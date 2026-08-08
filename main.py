@@ -8,9 +8,23 @@ STOP_WORD = 'СТОП'
 
 
 def load_words(filename):
-	...
-    
+    dictionary = {}
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue
+                parts = line.split(',')
+                if len(parts) != 2:
+                    continue
+                key, value = parts[0].strip(), parts[1].strip()
+                dictionary[key] = value
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден.")
+        sys.exit(1)
 
+    return dictionary
 
 def print_statistics(score, total_time):
     ...
