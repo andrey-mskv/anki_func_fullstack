@@ -3,7 +3,6 @@ import sys
 import time
 from typing import Dict, Tuple
 
-
 STOP_WORD = 'СТОП'
 
 
@@ -21,50 +20,61 @@ def load_words(filename):
                 key, value = parts[0].strip(), parts[1].strip()
                 dictionary[key] = value
     except FileNotFoundError:
-        print(f"Файл {filename} не найден.")
+        print(f'Файл {filename} не найден.')
         sys.exit(1)
 
     return dictionary
 
-def print_statistics(score, total_time):
-    ...
+
+def print_statistics(score, total_time): ...
 
 
-def ask_and_check(word, correct):
-    ...
+def ask_and_check(word, correct): ...
 
 
-def start_game(words):
-    ...
+def start_game(words): ...
 
 
-def train_until_mistake(words):
-    ...
+def train_until_mistake(words): ...
 
 
 def add_words(words):
-    ...
+
+    print('Чтобы закончить, введите СТОП')
+
+    while True:
+        input_word = input('Введите слово: ')
+
+        if input_word.strip().upper() == STOP_WORD:
+            break
+
+        input_translation = input('Введите перевод: ')
+
+        if input_translation.strip().upper() == STOP_WORD:
+            break
+
+        words[input_word.strip()] = input_translation.strip()
 
 
 def show_all_words(words):
     all_words = []
 
     for key, value in words.items():
-        all_words.append(f"{key} - {value}")
-        
-    print("; ".join(all_words))
+        all_words.append(f'{key} - {value}')
+
+    print('; '.join(all_words))
 
 
-def save_words(words, filename = 'words.txt'):
+def save_words(words, filename='words.txt'):
     try:
         with open(filename, 'w', encoding='utf-8') as file:
             for key, value in words.items():
-                file.write(f"{key},{value}\n")
+                file.write(f'{key},{value}\n')
 
-        print(f"Было сохранено {len(words)} слов в файл {filename}")
+        print(f'Было сохранено {len(words)} слов в файл {filename}')
 
     except Exception as e:
-        print(f"Ошибка при сохранении слов: {e}")
+        print(f'Ошибка при сохранении слов: {e}')
 
 
 def main():
