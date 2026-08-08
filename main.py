@@ -50,8 +50,16 @@ def show_all_words(words):
     ...
 
 
-def save_words(words, filename):
-    ...
+def save_words(words, filename = 'words.txt'):
+    try:
+        with open(filename, 'w', encoding='utf-8') as file:
+            for key, value in words.items():
+                file.write(f"{key},{value}\n")
+
+        print(f"Было сохранено {len(words)} слов в файл {filename}")
+
+    except Exception as e:
+        print(f"Ошибка при сохранении слов: {e}")
 
 
 def main():
