@@ -1,0 +1,10 @@
+apple,яблоко
+Morning,утро
+London,Лондон
+computer,компьютер
+Friday,пятница
+Russia,Россия
+window,окно
+English,английский
+travel,путешествие
+Summer,лето
