@@ -47,7 +47,12 @@ def add_words(words):
 
 
 def show_all_words(words):
-    ...
+    all_words = []
+
+    for key, value in words.items():
+        all_words.append(f"{key} - {value}")
+        
+    print("; ".join(all_words))
 
 
 def save_words(words, filename = 'words.txt'):
