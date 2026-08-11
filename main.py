@@ -6,7 +6,7 @@ from typing import Dict, Tuple
 STOP_WORD = 'СТОП'
 
 
-def load_words(filename):
+def load_words(filename: str) -> Dict[str, str]:
     dictionary = {}
     try:
         with open(filename, 'r', encoding='utf-8') as file:
@@ -30,11 +30,24 @@ def print_statistics(score, total_time):
     pass
 
 
-def ask_and_check(word, correct):
-    pass
+def ask_and_check(word: str, correct: str) -> Tuple[bool, bool, float]:
+    print(f'Переведите слово: {word}')
+
+    start_time = time.time()
+
+    answer = input('Ваш ответ: ')
+
+    if answer.strip().upper() == STOP_WORD:
+        return True, False, 0.0
+
+    answer_time = time.time() - start_time
+
+    is_correct = answer.strip().lower() == correct.strip().lower()
+
+    return False, is_correct, answer_time
 
 
-def start_game(words):
+def start_game(words: Dict[str, str]):
 
     if not words:
         print('Словарь пуст. Добавьте слова перед началом игры.')
@@ -51,51 +64,48 @@ def start_game(words):
     key_list = list(words.keys())
 
     while True:
-        random_key = key_list[random.randint(0, len(key_list) - 1)]
+        random_key = random.choice(key_list)
+        correct_answer = words[random_key]
 
-        start_time = time.time()
+        is_stop, is_correct, answer_time = ask_and_check(
+            random_key,
+            correct_answer,
+        )
 
-        print(f'Переведите слово: {random_key}')
-
-        user_answer = input('Ваш ответ: ')
-
-        if user_answer.strip().upper() == STOP_WORD:
+        if is_stop:
             average_time_message = ''
-
             if answer_count > 0:
                 average_time_message = (
-                    f' (Среднее время ответа:'
-                    f'{total_time / answer_count:.2f} секунд)'
+                    f'Среднее время ответа: '
+                    f'{total_time / answer_count:.2f} сек.'
                 )
-
             print(
-                f'Игра окончена.\nВаш счет: {score}.\n'
-                f'Общее время: {total_time:.2f} секунд{average_time_message}.'
+                f'Спасибо за игру!'
+                f'Ваш итоговый счет: {score}\n'
+                f'Время игры: {total_time:.2f} секунд'
+                f' {average_time_message}'
             )
-
             break
 
-        answer_time = time.time() - start_time
         total_time += answer_time
         answer_count += 1
 
-        if user_answer.strip().lower() == words[random_key].strip().lower():
+        if is_correct:
             score += 1
-
             print(f'Верно! Время ответа: {answer_time:.2f} секунд')
 
         else:
             print(
-                f'Неверно! Правильный ответ: {words[random_key]}.\n'
+                f'Неверно! Правильный ответ: {correct_answer}.\n'
                 f'Время ответа: {answer_time:.2f} секунд'
             )
 
 
-def train_until_mistake(words):
+def train_until_mistake(words: Dict[str, str]):
     pass
 
 
-def add_words(words):
+def add_words(words: Dict[str, str]):
 
     print('Чтобы закончить, введите СТОП')
 
@@ -113,7 +123,7 @@ def add_words(words):
         words[input_word.strip()] = input_translation.strip()
 
 
-def show_all_words(words):
+def show_all_words(words: Dict[str, str]):
     all_words = []
 
     for key, value in words.items():
@@ -122,7 +132,7 @@ def show_all_words(words):
     print('; '.join(all_words))
 
 
-def save_words(words, filename='words.txt'):
+def save_words(words: Dict[str, str], filename: str = 'words.txt'):
     try:
         with open(filename, 'w', encoding='utf-8') as file:
             for key, value in words.items():
@@ -145,6 +155,27 @@ def main():
         '''
         print(menu)
         menu_choice = input('Пункт меню: ')
+
+        if menu_choice == '1':
+            words = load_words('words.txt')
+            start_game(words)
+
+        elif menu_choice == '2':
+            words = load_words('words.txt')
+            add_words(words)
+            save_words(words, 'words.txt')
+
+        elif menu_choice == '3':
+            words = load_words('words.txt')
+            train_until_mistake(words)
+
+        elif menu_choice == '4':
+            words = load_words('words.txt')
+            show_all_words(words)
+
+        elif menu_choice == '5':
+            print('До свидания!')
+            break
 
 
 if __name__ == '__main__':
