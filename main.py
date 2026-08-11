@@ -160,14 +160,30 @@ def add_words(words: Dict[str, str]):
     print('Чтобы закончить, введите СТОП')
 
     while True:
-        input_word = input('Введите слово: ')
+        input_word = input('Введите слово: ').strip()
 
-        if input_word.strip().upper() == STOP_WORD:
+        if input_word.upper() == STOP_WORD:
             break
 
-        input_translation = input('Введите перевод: ')
+        if not input_word:
+            print('Слово не может быть пустым. Попробуйте ещё раз.')
+            continue
 
-        if input_translation.strip().upper() == STOP_WORD:
+        existing_word = next(
+            (key for key in words.keys() if key.lower() == input_word.lower()),
+            None,
+        )
+
+        if existing_word:
+            print(
+                f'Слово "{input_word}" уже существует в словаре. '
+                f'Его перевод: {words[existing_word]}'
+            )
+            continue
+
+        input_translation = input('Введите перевод: ').strip()
+
+        if input_translation.upper() == STOP_WORD:
             break
 
         words[input_word.strip()] = input_translation.strip()
