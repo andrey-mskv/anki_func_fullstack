@@ -255,7 +255,7 @@ def main():
             sys.exit()
 
         else:
-            print('Неверный пункт меню.')
+            print('Неизвестный пункт меню')
 
 
 if __name__ == '__main__':
