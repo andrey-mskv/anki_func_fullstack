@@ -48,7 +48,7 @@ def print_statistics(score: int, total_time: float):
         average_time_message = '—'
 
     print(
-        f'Ваш итоговый счёт: {score}\n'
+        f'Ваш итоговый счет: {score}\n'
         f'Время игры: {total_time:.2f} секунд '
         f'(среднее время: {average_time_message})\n'
     )
@@ -94,8 +94,6 @@ def play_game(words: Dict[str, str], stop_on_mistake: bool = False):
         print('Словарь пуст. Добавьте слова перед началом игры.')
         return
 
-    print('Начинаем игру! Чтобы закончить, введите СТОП')
-
     total_time = 0
     score = 0
     answer_count = 0
@@ -114,6 +112,8 @@ def play_game(words: Dict[str, str], stop_on_mistake: bool = False):
             )
 
             if is_stop:
+                if stop_on_mistake:
+                    print('Выход из режима по запросу пользователя.')
                 print_statistics(score, total_time)
                 return
 
@@ -124,9 +124,7 @@ def play_game(words: Dict[str, str], stop_on_mistake: bool = False):
                 score += 1
                 print(f'Верно! Время ответа: {answer_time:.2f} секунд')
             else:
-                print(
-                    f'Ошибка! Неверно. ' f'Правильный ответ: {correct_answer}.'
-                )
+                print(f'Ошибка! Неверно. Правильный ответ: {correct_answer}.')
                 print_statistics(score, total_time)
 
                 if stop_on_mistake:
@@ -139,6 +137,7 @@ def start_game(words: Dict[str, str]):
     Args:
         words: Словарь слов и их переводов.
     """
+    print('Начинаем игру! Чтобы закончить, введите СТОП')
     play_game(words)
 
 
@@ -148,6 +147,7 @@ def train_until_mistake(words: Dict[str, str]):
     Args:
         words: Словарь слов и их переводов.
     """
+    print('Режим: Игра до первой ошибки! Чтобы выйти вручную, введите СТОП')
     play_game(words, stop_on_mistake=True)
 
 
@@ -176,10 +176,10 @@ def add_words(words: Dict[str, str]):
 
         if existing_word:
             print(
-                f'Слово "{input_word}" уже существует в словаре. '
-                f'Его перевод: {words[existing_word]}'
+                f'Слово "{input_word}" уже существует. '
+                f'Перевод будет обновлен. '
+                f'Старый перевод: "{words[existing_word]}"'
             )
-            continue
 
         input_translation = input('Введите перевод: ').strip()
 
@@ -223,6 +223,9 @@ def save_words(words: Dict[str, str], filename: str = 'words.txt'):
 
 def main():
     """Главная функция программы."""
+    words = load_words('words.txt')
+    print(f'Было загружено {len(words)} слов из файла words.txt')
+
     while True:
         menu = '''Меню:
         1. Начать игру
@@ -235,19 +238,15 @@ def main():
         menu_choice = input('Пункт меню: ')
 
         if menu_choice == '1':
-            words = load_words('words.txt')
             start_game(words)
 
         elif menu_choice == '2':
-            words = load_words('words.txt')
             add_words(words)
 
         elif menu_choice == '3':
-            words = load_words('words.txt')
             train_until_mistake(words)
 
         elif menu_choice == '4':
-            words = load_words('words.txt')
             show_all_words(words)
 
         elif menu_choice == '5':
@@ -256,7 +255,7 @@ def main():
             sys.exit()
 
         else:
-            print('Неверный пункт меню. Попробуйте ещё раз.')
+            print('Неверный пункт меню.')
 
 
 if __name__ == '__main__':
