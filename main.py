@@ -6,7 +6,7 @@ from typing import Dict, Tuple
 STOP_WORD = 'СТОП'
 
 
-def load_words(filename: str) -> Dict[str, str]:
+def load_words(filename: str = 'words.txt') -> Dict[str, str]:
     """Загружает пары слов и переводов из файла.
 
     Args:
@@ -223,7 +223,7 @@ def save_words(words: Dict[str, str], filename: str = 'words.txt'):
 
 def main():
     """Главная функция программы."""
-    words = load_words('words.txt')
+    words = load_words()
     print(f'Было загружено {len(words)} слов из файла words.txt')
 
     while True:
@@ -250,7 +250,7 @@ def main():
             show_all_words(words)
 
         elif menu_choice == '5':
-            save_words(words, 'words.txt')
+            save_words(words)
             print('До скорого!')
             sys.exit()
 
